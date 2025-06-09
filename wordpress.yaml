@@ -1,0 +1,49 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: wordpress
+  InstanceType:
+    Type: String
+    Default: t2.micro
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-0aae0eaa00906dad9
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Default: subnet-015555e5669129ae7
+  SecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Default: sg-07620c55fafa4b5ed
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  AwsRegion:
+    Type: String
+    Default: us-east-1
+
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref LatestAmiId
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !Ref SecurityGroupId
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          sudo su
+          yum update -y
+          amazon-linux-extras install docker -y 
+          systemctl start docker
+          systemctl enable docker
+          usermod -a -G docker ec2-user
+          docker pull wordpress:latest
+          docker run -d -p 8080:80 wordpress
+      Tags:
+        - Key: Name
+          Value: WordPress
