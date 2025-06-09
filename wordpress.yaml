@@ -9,13 +9,13 @@ Parameters:
     Default: t2.micro
   VpcId:
     Type: AWS::EC2::VPC::Id
-    Default: vpc-0aae0eaa00906dad9
+    Default: vpc-02228cbcb7fb8cb31
   SubnetId:
     Type: AWS::EC2::Subnet::Id
-    Default: subnet-015555e5669129ae7
+    Default: subnet-0c43cb2fc3f8f8a1c
   SecurityGroupId:
     Type: AWS::EC2::SecurityGroup::Id
-    Default: sg-07620c55fafa4b5ed
+    Default: sg-0c9be005e1deb556f
   LatestAmiId:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
